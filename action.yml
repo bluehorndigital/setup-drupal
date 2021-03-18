@@ -1,0 +1,18 @@
+name: 'Setup Drupal action'
+author: bluehorndigital
+description: 'GitHub Action to setup Drupal for testing an extension'
+inputs:
+  version:
+    description: 'Drupal version constraint'
+    required: true
+    default: '^9.0'
+  path:
+    description: 'Path to create the Drupal project'
+    required: true
+    default: '~/drupal'
+  dependencies:
+    description: 'Additional dependencies to install'
+    required: false
+runs:
+  using: 'node12'
+  main: 'index.js'

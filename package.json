@@ -1,0 +1,36 @@
+{
+  "name": "setup-drupal",
+  "version": "1.0.0",
+  "description": "GitHub Action to setup Drupal for testing an extension",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "ncc build src/index.js --license licenses.txt && git add dist/",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bluehorndigital/setup-drupal.git"
+  },
+  "keywords": [
+    "actions",
+    "drupal",
+    "setup"
+  ],
+  "author": "Bluehorn Digital <hello@bluehorn.digital>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bluehorndigital/setup-drupal/issues"
+  },
+  "homepage": "https://github.com/bluehorndigital/setup-drupal#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/exec": "^1.0.4",
+    "@actions/github": "^4.0.0",
+    "semver": "^7.3.4"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.27.0",
+    "husky": "^5.1.3"
+  }
+}
