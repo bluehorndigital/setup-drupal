@@ -7,7 +7,7 @@ try {
     const drupalPath = core.getInput('path');
     const extraDependencies = core.getInput('dependencies')
 
-    exec('composer', [
+    exec.exec('composer', [
         'create-project',
         `drupal/recommended-project:${drupalVersion}`,
         drupalPath,
@@ -32,7 +32,7 @@ try {
     // composer config repositories.0 "{\"type\": \"path\", \"url\": \"$GITHUB_WORKSPACE\", \"options\": {\"symlink\": false}}"
     // composer config repositories.1 composer https://packages.drupal.org/8
     for (command of commands) {
-        exec('composer', command, {
+        exec.exec('composer', command, {
             cwd: drupalPath,
             env: {
                 COMPOSER_MEMORY_LIMIT: -1,
