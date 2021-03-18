@@ -2,12 +2,12 @@ const core = require('@actions/core');
 const exec = require('@actions/exec');
 const semverMajor = require('semver/functions/major')
 
-try {
+async function doScript() {
     const drupalVersion = core.getInput('version');
     const drupalPath = core.getInput('path');
     const extraDependencies = core.getInput('dependencies')
 
-    exec.exec('composer', [
+    await exec.exec('composer', [
         'create-project',
         `drupal/recommended-project:${drupalVersion}`,
         drupalPath,
@@ -32,14 +32,17 @@ try {
     // composer config repositories.0 "{\"type\": \"path\", \"url\": \"$GITHUB_WORKSPACE\", \"options\": {\"symlink\": false}}"
     // composer config repositories.1 composer https://packages.drupal.org/8
     for (command of commands) {
-        exec.exec('composer', command, {
+        await exec.exec('composer', command, {
             cwd: drupalPath,
             env: {
                 COMPOSER_MEMORY_LIMIT: -1,
             }
         });
     }
+}
 
+try {
+    doScript();
 } catch (error) {
     core.setFailed(error.message);
 }
