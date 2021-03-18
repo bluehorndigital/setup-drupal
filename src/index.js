@@ -34,15 +34,8 @@ async function doScript() {
     for (command of commands) {
         await exec.exec('composer', command, {
             cwd: drupalPath,
-            env: {
-                COMPOSER_MEMORY_LIMIT: -1,
-            }
         });
     }
 }
 
-try {
-    doScript();
-} catch (error) {
-    core.setFailed(error.message);
-}
+doScript().catch(error => core.setFailed(error.message));
