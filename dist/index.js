@@ -1846,12 +1846,110 @@ module.exports = SemVer
 
 /***/ }),
 
+/***/ 466:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const SemVer = __nccwpck_require__(88)
+const parse = __nccwpck_require__(925)
+const {re, t} = __nccwpck_require__(523)
+
+const coerce = (version, options) => {
+  if (version instanceof SemVer) {
+    return version
+  }
+
+  if (typeof version === 'number') {
+    version = String(version)
+  }
+
+  if (typeof version !== 'string') {
+    return null
+  }
+
+  options = options || {}
+
+  let match = null
+  if (!options.rtl) {
+    match = version.match(re[t.COERCE])
+  } else {
+    // Find the right-most coercible string that does not share
+    // a terminus with a more left-ward coercible string.
+    // Eg, '1.2.3.4' wants to coerce '2.3.4', not '3.4' or '4'
+    //
+    // Walk through the string checking with a /g regexp
+    // Manually set the index so as to pick up overlapping matches.
+    // Stop when we get a match that ends at the string end, since no
+    // coercible string can be more right-ward without the same terminus.
+    let next
+    while ((next = re[t.COERCERTL].exec(version)) &&
+        (!match || match.index + match[0].length !== version.length)
+    ) {
+      if (!match ||
+            next.index + next[0].length !== match.index + match[0].length) {
+        match = next
+      }
+      re[t.COERCERTL].lastIndex = next.index + next[1].length + next[2].length
+    }
+    // leave it in a clean state
+    re[t.COERCERTL].lastIndex = -1
+  }
+
+  if (match === null)
+    return null
+
+  return parse(`${match[2]}.${match[3] || '0'}.${match[4] || '0'}`, options)
+}
+module.exports = coerce
+
+
+/***/ }),
+
 /***/ 688:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const SemVer = __nccwpck_require__(88)
 const major = (a, loose) => new SemVer(a, loose).major
 module.exports = major
+
+
+/***/ }),
+
+/***/ 925:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const {MAX_LENGTH} = __nccwpck_require__(293)
+const { re, t } = __nccwpck_require__(523)
+const SemVer = __nccwpck_require__(88)
+
+const parseOptions = __nccwpck_require__(785)
+const parse = (version, options) => {
+  options = parseOptions(options)
+
+  if (version instanceof SemVer) {
+    return version
+  }
+
+  if (typeof version !== 'string') {
+    return null
+  }
+
+  if (version.length > MAX_LENGTH) {
+    return null
+  }
+
+  const r = options.loose ? re[t.LOOSE] : re[t.FULL]
+  if (!r.test(version)) {
+    return null
+  }
+
+  try {
+    return new SemVer(version, options)
+  } catch (er) {
+    return null
+  }
+}
+
+module.exports = parse
 
 
 /***/ }),
@@ -2138,7 +2236,7 @@ createToken('GTE0PRE', '^\\s*>=\\s*0\.0\.0-0\\s*$')
 
 const core = __nccwpck_require__(186);
 const exec = __nccwpck_require__(514);
-const semverMajor = __nccwpck_require__(688)
+const utils = __nccwpck_require__ (608)
 
 async function doScript() {
     const drupalVersion = core.getInput('version');
@@ -2159,7 +2257,7 @@ async function doScript() {
         // @todo requires composer 2
         ['require', `drupal/core-dev:${drupalVersion}`, '--dev', '-W']
     ];
-    if (semverMajor(drupalVersion) > 8) {
+    if (utils.getMajorVersionFromConstraint(drupalVersion) > 8) {
         commands.push(['require', '--dev', 'phpspec/prophecy-phpunit:^2']);
     }
     if (extraDependencies) {
@@ -2183,6 +2281,23 @@ try {
     doScript();
 } catch (error) {
     core.setFailed(error.message);
+}
+
+
+/***/ }),
+
+/***/ 608:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const semverMajor = __nccwpck_require__(688)
+const smeverCoerce = __nccwpck_require__(466)
+
+function getMajorVersionFromConstraint(constraint) {
+    return semverMajor(smeverCoerce(constraint))
+}
+
+module.exports = {
+    getMajorVersionFromConstraint
 }
 
 

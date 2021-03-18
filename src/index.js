@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const exec = require('@actions/exec');
-const semverMajor = require('semver/functions/major')
+const utils = require ('./utils')
 
 async function doScript() {
     const drupalVersion = core.getInput('version');
@@ -21,7 +21,7 @@ async function doScript() {
         // @todo requires composer 2
         ['require', `drupal/core-dev:${drupalVersion}`, '--dev', '-W']
     ];
-    if (semverMajor(drupalVersion) > 8) {
+    if (utils.getMajorVersionFromConstraint(drupalVersion) > 8) {
         commands.push(['require', '--dev', 'phpspec/prophecy-phpunit:^2']);
     }
     if (extraDependencies) {
