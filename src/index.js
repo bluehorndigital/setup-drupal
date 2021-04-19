@@ -5,7 +5,7 @@ const path = require('path');
 
 async function doScript() {
     const drupalVersion = core.getInput('version');
-    const drupalPath = utils.resolvePath(core.getInput('path') ?? '~/drupal');
+    const drupalPath = utils.resolvePath(core.getInput('path') || '~/drupal');
     const extraDependencies = core.getInput('dependencies')
 
     await exec.exec('composer', [
