@@ -2237,7 +2237,6 @@ createToken('GTE0PRE', '^\\s*>=\\s*0\.0\.0-0\\s*$')
 const core = __nccwpck_require__(186);
 const exec = __nccwpck_require__(514);
 const utils = __nccwpck_require__ (608)
-const path = __nccwpck_require__(622);
 
 async function doScript() {
     const drupalVersion = core.getInput('version');
@@ -2250,10 +2249,6 @@ async function doScript() {
         drupalPath,
         '--no-interaction'
     ]);
-
-    await exec.exec('pwd', [], {
-        cwd: drupalPath
-    });
 
     const commands = [
         ['config', 'minimum-stability', 'dev'],

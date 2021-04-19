@@ -1,7 +1,6 @@
 const core = require('@actions/core');
 const exec = require('@actions/exec');
 const utils = require ('./utils')
-const path = require('path');
 
 async function doScript() {
     const drupalVersion = core.getInput('version');
@@ -14,10 +13,6 @@ async function doScript() {
         drupalPath,
         '--no-interaction'
     ]);
-
-    await exec.exec('pwd', [], {
-        cwd: drupalPath
-    });
 
     const commands = [
         ['config', 'minimum-stability', 'dev'],

@@ -67,8 +67,5 @@ jobs:
         with:
           version: ${{ matrix.drupal-version }}
           path: ~/drupal
-
-      - name: Verify build
-        run: ls ~/drupal
       - name: Verify build
         run: test -f ~/drupal/web/index.php
