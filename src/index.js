@@ -1,10 +1,11 @@
 const core = require('@actions/core');
 const exec = require('@actions/exec');
 const utils = require ('./utils')
+const path = require('path');
 
 async function doScript() {
     const drupalVersion = core.getInput('version');
-    const drupalPath = core.getInput('path');
+    const drupalPath = utils.resolvePath(core.getInput('path') ?? '~/drupal');
     const extraDependencies = core.getInput('dependencies')
 
     await exec.exec('composer', [

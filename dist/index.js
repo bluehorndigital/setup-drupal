@@ -2237,10 +2237,11 @@ createToken('GTE0PRE', '^\\s*>=\\s*0\.0\.0-0\\s*$')
 const core = __nccwpck_require__(186);
 const exec = __nccwpck_require__(514);
 const utils = __nccwpck_require__ (608)
+const path = __nccwpck_require__(622);
 
 async function doScript() {
     const drupalVersion = core.getInput('version');
-    const drupalPath = core.getInput('path');
+    const drupalPath = utils.resolvePath(core.getInput('path') ?? '~/drupal');
     const extraDependencies = core.getInput('dependencies')
 
     await exec.exec('composer', [
@@ -2286,14 +2287,24 @@ doScript().catch(error => core.setFailed(error.message));
 /***/ 608:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
+const path = __nccwpck_require__(622);
 const semverMajor = __nccwpck_require__(688)
 const smeverCoerce = __nccwpck_require__(466)
+
+function resolvePath(filepath) {
+    if (filepath[0] === '~') {
+        return path.join(process.env.HOME, filepath.slice(1));
+    }
+    return path.resolve(filepath)
+}
 
 function getMajorVersionFromConstraint(constraint) {
     return semverMajor(smeverCoerce(constraint))
 }
 
+
 module.exports = {
+    resolvePath,
     getMajorVersionFromConstraint
 }
 
