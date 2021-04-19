@@ -2254,6 +2254,8 @@ async function doScript() {
         ['config', 'minimum-stability', 'dev'],
         ['config', 'prefer-stable', 'true'],
         ['config', 'preferred-install', 'dist'],
+        ['config', 'repositories.0', "{\"type\": \"path\", \"url\": \"$GITHUB_WORKSPACE\", \"options\": {\"symlink\": false}}"],
+        ['config', 'repositories.1', 'composer', 'https://packages.drupal.org/8']
         // @todo requires composer 2
         ['require', `drupal/core-dev:${drupalVersion}`, '--dev', '-W']
     ];
@@ -2264,9 +2266,6 @@ async function doScript() {
         commands.push(['require', extraDependencies]);
     }
 
-    // @todo allow adding current repo.
-    // composer config repositories.0 "{\"type\": \"path\", \"url\": \"$GITHUB_WORKSPACE\", \"options\": {\"symlink\": false}}"
-    // composer config repositories.1 composer https://packages.drupal.org/8
     for (command of commands) {
         await exec.exec('composer', command, {
             cwd: drupalPath,
