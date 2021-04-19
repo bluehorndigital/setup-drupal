@@ -1,5 +1,9 @@
 const utils = require ('../src/utils')
 
+test('resolved path', () => {
+  expect(utils.resolvePath('~/drupal')).toBe(`${process.env.HOME}/drupal`);
+});
+
 test('can find major version from constraint', () => {
     expect(utils.getMajorVersionFromConstraint('^9.1')).toBe(9);
     expect(utils.getMajorVersionFromConstraint('^9.2@alpha')).toBe(9);
