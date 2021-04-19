@@ -14,6 +14,10 @@ async function doScript() {
         '--no-interaction'
     ]);
 
+    await exec.exec('pwd', [], {
+        cwd: drupalPath
+    });
+
     const commands = [
         ['config', 'minimum-stability', 'dev'],
         ['config', 'prefer-stable', 'true'],
