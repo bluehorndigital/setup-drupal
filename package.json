@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "build": "ncc build src/index.js --license licenses.txt && git add dist/",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "debug:run": "npm run build && act -P ubuntu-latest=shivammathur/node:latest --job run"
   },
   "repository": {
     "type": "git",

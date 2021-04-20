@@ -28,9 +28,8 @@ async function doScript() {
         ['config', 'prefer-stable', 'true'],
         ['config', 'preferred-install', 'dist'],
         ['config', 'repositories.0', `{"type": "path", "url": "${githubWorkspacePath}", "options": {"symlink": false}}`],
-        ['config', 'repositories.1', 'composer', 'https://packages.drupal.org/8']
-        // @todo requires composer 2
-        ['require', `drupal/core-dev:${drupalVersion}`, '--dev', '-W']
+        ['config', 'repositories.1', 'composer', 'https://packages.drupal.org/8'],
+        ['require', '--dev', `drupal/core-dev:${drupalVersion}`],
     ];
     if (utils.getMajorVersionFromConstraint(drupalVersion) > 8) {
         commands.push(['require', '--dev', 'phpspec/prophecy-phpunit:^2']);
@@ -40,6 +39,7 @@ async function doScript() {
     }
 
     for (command of commands) {
+        core.debug(`Executing: composer ${command}`)
         await exec.exec('composer', command, {
             cwd: drupalPath,
         });

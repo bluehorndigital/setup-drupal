@@ -34,7 +34,7 @@ jobs:
         php-version: ['7.4']
         drupal-version: ['^9.1']
     env:
-      extensions: dom, curl, libxml, mbstring, zip, pdo, mysql, pdo_mysql, bcmath, gd, exif, iconv
+      extensions: zip, gd
       key: cache-v1
     steps:
       - name: Checkout
