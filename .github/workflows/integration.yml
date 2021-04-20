@@ -1,4 +1,4 @@
-name: Main workflow
+name: integration
 on:
   workflow_dispatch:
   pull_request:
@@ -12,27 +12,19 @@ on:
     paths-ignore:
       - '**.md'
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12.x
-    - run: npm ci
-    - run: npm test
-
   run:
     name: Run
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        operating-system: [ubuntu-latest]
-        php-version: ['7.4']
-        drupal-version: ['^9.1']
+        include:
+          - php-version: "7.4"
+            drupal-version: "~8.9"
+          - php-version: "7.4"
+            drupal-version: "^9"
+          - php-version: "8.0"
+            drupal-version: "^9"
     env:
       extensions: zip, gd
       key: cache-v1
@@ -70,8 +62,7 @@ jobs:
         env:
           INPUT_VERSION: ${{ matrix.drupal-version }}
           INPUT_PATH: ~/drupal
-
-      - name: Verify build
-        run: test -f ~/drupal/web/index.php
       - name: Debug composer.json
         run: cat ~/drupal/composer.json
+      - name: Verify build
+        run: test -f ~/drupal/web/index.php
