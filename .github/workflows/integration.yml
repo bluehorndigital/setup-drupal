@@ -14,13 +14,17 @@ on:
 jobs:
   run:
     name: Run
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        operating-system: [ubuntu-latest]
-        php-version: ['7.4', '8.0']
-        drupal-version: ['^9.1', '^8.9']
+        include:
+          - php-version: "7.4"
+            drupal-version: "~8.9"
+          - php-version: "7.4"
+            drupal-version: "^9"
+          - php-version: "8.0"
+            drupal-version: "^9"
     env:
       extensions: zip, gd
       key: cache-v1
