@@ -331,6 +331,7 @@ function getState(name) {
 exports.getState = getState;
 //# sourceMappingURL=core.js.map
 
+
 /***/ }),
 
 /***/ 717:
@@ -2239,7 +2240,16 @@ const exec = __nccwpck_require__(514);
 const utils = __nccwpck_require__ (608)
 
 async function doScript() {
-    const drupalVersion = core.getInput('version');
+    // taken from actions/checkout
+    let githubWorkspacePath = process.env['GITHUB_WORKSPACE']
+    if (!githubWorkspacePath) {
+        throw new Error('GITHUB_WORKSPACE not defined')
+    }
+    githubWorkspacePath = utils.resolvePath(githubWorkspacePath)
+
+    const drupalVersion = core.getInput('version', {
+        required: true,
+    });
     const drupalPath = utils.resolvePath(core.getInput('path') || '~/drupal');
     const extraDependencies = core.getInput('dependencies')
 
@@ -2254,10 +2264,9 @@ async function doScript() {
         ['config', 'minimum-stability', 'dev'],
         ['config', 'prefer-stable', 'true'],
         ['config', 'preferred-install', 'dist'],
-        ['config', 'repositories.0', "{\"type\": \"path\", \"url\": \"$GITHUB_WORKSPACE\", \"options\": {\"symlink\": false}}"],
-        ['config', 'repositories.1', 'composer', 'https://packages.drupal.org/8']
-        // @todo requires composer 2
-        ['require', `drupal/core-dev:${drupalVersion}`, '--dev', '-W']
+        ['config', 'repositories.0', `{"type": "path", "url": "${githubWorkspacePath}", "options": {"symlink": false}}`],
+        ['config', 'repositories.1', 'composer', 'https://packages.drupal.org/8'],
+        ['require', '--dev', `drupal/core-dev:${drupalVersion}`],
     ];
     if (utils.getMajorVersionFromConstraint(drupalVersion) > 8) {
         commands.push(['require', '--dev', 'phpspec/prophecy-phpunit:^2']);
@@ -2267,6 +2276,7 @@ async function doScript() {
     }
 
     for (command of commands) {
+        core.debug(`Executing: composer ${command}`)
         await exec.exec('composer', command, {
             cwd: drupalPath,
         });

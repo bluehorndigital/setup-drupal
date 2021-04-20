@@ -20,7 +20,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: 15.x
+        node-version: 12.x
     - run: npm ci
     - run: npm test
 
@@ -34,7 +34,7 @@ jobs:
         php-version: ['7.4']
         drupal-version: ['^9.1']
     env:
-      extensions: dom, curl, libxml, mbstring, zip, pdo, mysql, pdo_mysql, bcmath, gd, exif, iconv
+      extensions: zip, gd
       key: cache-v1
     steps:
       - name: Checkout
@@ -62,10 +62,16 @@ jobs:
           extensions: ${{ env.extensions }}
           tools: composer:v2
 
+      # Execute out script directly without `uses`
+      # core.getInput() checks for environment variablts prefixed INPUT_*
+      # process.env[`INPUT_${name.replace(/ /g, '_').toUpperCase()}`] || ''
       - name: Setup Drupal
-        uses: ./
-        with:
-          version: ${{ matrix.drupal-version }}
-          path: ~/drupal
+        run: node dist/index.js
+        env:
+          INPUT_VERSION: ${{ matrix.drupal-version }}
+          INPUT_PATH: ~/drupal
+
       - name: Verify build
         run: test -f ~/drupal/web/index.php
+      - name: Debug composer.json
+        run: cat ~/drupal/composer.json
