@@ -2269,7 +2269,7 @@ async function doScript() {
         ['require', '--dev', `drupal/core-dev:${drupalVersion}`],
     ];
     if (utils.getMajorVersionFromConstraint(drupalVersion) > 8) {
-        commands.push(['require', '--dev', 'phpspec/prophecy-phpunit:^2']);
+        commands.push(['require', '--dev', '--with-all-dependencies', 'phpspec/prophecy-phpunit:^2']);
     }
     if (extraDependencies) {
         commands.push(['require', extraDependencies]);
