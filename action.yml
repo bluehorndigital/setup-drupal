@@ -1,4 +1,4 @@
-name: 'Setup Drupal action'
+name: 'Setup Drupal 9 action'
 author: andrewfandrew
 description: 'GitHub Action to setup Drupal for testing an extension'
 inputs:
