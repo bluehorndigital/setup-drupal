@@ -62,7 +62,7 @@ jobs:
       - name: "Setup Drupal"
         run: |
          node dist/index.js
-         composer config --no-plugins allow-plugins.composer/installers [true
+         composer config --no-plugins allow-plugins.composer/installers true
         env:
           INPUT_VERSION: ${{ matrix.drupal-version }}
           INPUT_PATH: ~/drupal
