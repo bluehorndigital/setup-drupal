@@ -1,11 +1,11 @@
 name: 'Setup Drupal action'
-author: bluehorndigital
+author: andrewfandrew
 description: 'GitHub Action to setup Drupal for testing an extension'
 inputs:
   version:
     description: 'Drupal version constraint'
     required: true
-    default: '^9.0'
+    default: '^9'
   path:
     description: 'Path to create the Drupal project'
     required: true
