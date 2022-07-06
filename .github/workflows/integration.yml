@@ -61,7 +61,7 @@ jobs:
       # process.env[`INPUT_${name.replace(/ /g, '_').toUpperCase()}`] || ''
       - name: Setup Drupal
         run: |
-				 node dist/index.js
+         node dist/index.js
          composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
         env:
           INPUT_VERSION: ${{ matrix.drupal-version }}
@@ -69,6 +69,5 @@ jobs:
 
       - name: Debug composer.json
         run: cat ~/drupal/composer.json
-      
-			- name: Verify build
+      - name: Verify build
         run: test -f ~/drupal/web/index.php
