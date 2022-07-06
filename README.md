@@ -25,8 +25,8 @@ Extra dependencies to install.
 ## Example usage
 
 ```
-uses: bluehorndigital/setup-drupal@v1
+uses: cactus-blossom-it-services-limited/setup-drupal@v1
 with:
-  version: '9.2.x-dev'
+  version: '9.3.x'
   dependencies: 'drupal/token drupal/ctools'
 ```
