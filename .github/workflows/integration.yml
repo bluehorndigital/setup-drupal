@@ -60,7 +60,9 @@ jobs:
       # core.getInput() checks for environment variablts prefixed INPUT_*
       # process.env[`INPUT_${name.replace(/ /g, '_').toUpperCase()}`] || ''
       - name: Setup Drupal
-        run: node dist/index.js
+        run: node dist/index.js &&
+             composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+        
         env:
           INPUT_VERSION: ${{ matrix.drupal-version }}
           INPUT_PATH: ~/drupal
