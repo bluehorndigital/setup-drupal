@@ -15,6 +15,7 @@ async function doScript() {
     });
     const drupalPath = utils.resolvePath(core.getInput('path') || '~/drupal');
     const extraDependencies = core.getInput('dependencies')
+    const allowPlugins = utils.stringToArray(core.getInput('allow_plugins'))
 
     await exec.exec('composer', [
         'create-project',
@@ -31,9 +32,23 @@ async function doScript() {
         ['config', 'repositories.1', 'composer', 'https://packages.drupal.org/8'],
         ['require', '--dev', `drupal/core-dev:${drupalVersion}`],
     ];
+
+    if (utils.getMajorVersionFromConstraint(drupalVersion) === 8) {
+        commands.push(['config', '--no-plugins', 'allow-plugins.drupal/core-composer-scaffold', 'true']);
+        commands.push(['config', '--no-plugins', 'allow-plugins.drupal/core-project-message', 'true']);
+    }
+    commands.push(['config', '--no-plugins', 'allow-plugins.composer/installers', 'true']);
+    commands.push(['config', '--no-plugins', 'allow-plugins.dealerdirect/phpcodesniffer-composer-installer', 'true']);
+    commands.push(['config', '--no-plugins', 'allow-plugins.phpstan/extension-installer', 'true']);
+
+    allowPlugins.forEach(package => {
+        commands.push(['config', '--no-plugins', 'allow-plugins.' + package, 'true']);
+    });
+
     if (utils.getMajorVersionFromConstraint(drupalVersion) > 8) {
         commands.push(['require', '--dev', '--with-all-dependencies', 'phpspec/prophecy-phpunit:^2']);
     }
+
     if (extraDependencies) {
         commands.push(['require', extraDependencies]);
     }
