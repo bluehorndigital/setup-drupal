@@ -31,6 +31,14 @@ async function doScript() {
         ['config', 'repositories.1', 'composer', 'https://packages.drupal.org/8'],
         ['require', '--dev', `drupal/core-dev:${drupalVersion}`],
     ];
+
+    if (utils.getMajorVersionFromConstraint(drupalVersion) === 8) {
+        commands.push(['config', '--no-plugins', 'allow-plugins.drupal/core-composer-scaffold', 'true']);
+        commands.push(['config', '--no-plugins', 'allow-plugins.drupal/core-project-message', 'true']);
+    }
+    commands.push(['config', '--no-plugins', 'allow-plugins.drupal/composer/installers', 'true']);
+    commands.push(['config', '--no-plugins', 'allow-plugins.drupal/dealerdirect/phpcodesniffer-composer-installer', 'true']);
+
     if (utils.getMajorVersionFromConstraint(drupalVersion) > 8) {
         commands.push(['require', '--dev', '--with-all-dependencies', 'phpspec/prophecy-phpunit:^2']);
     }
