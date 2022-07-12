@@ -64,7 +64,10 @@ jobs:
         env:
           INPUT_VERSION: ${{ matrix.drupal-version }}
           INPUT_PATH: ~/drupal
+          INPUT_ALLOW_PLUGINS: oomphinc/composer-installers-extender
       - name: Debug composer.json
         run: cat ~/drupal/composer.json
+      - name: Include plugin
+        run: cd ~/drupal && composer require oomphinc/composer-installers-extender
       - name: Verify build
         run: test -f ~/drupal/web/index.php

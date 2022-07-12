@@ -22,6 +22,10 @@ Where to build Drupal. Defaults to `~/drupal`.
 
 Extra dependencies to install.
 
+### `allow_plugins`
+
+Additional packages to configure with `allow-plugins`.
+
 ## Example usage
 
 ```

@@ -2251,6 +2251,7 @@ async function doScript() {
     });
     const drupalPath = utils.resolvePath(core.getInput('path') || '~/drupal');
     const extraDependencies = core.getInput('dependencies')
+    const allowPlugins = utils.stringToArray(core.getInput('allow_plugins'))
 
     await exec.exec('composer', [
         'create-project',
@@ -2272,12 +2273,18 @@ async function doScript() {
         commands.push(['config', '--no-plugins', 'allow-plugins.drupal/core-composer-scaffold', 'true']);
         commands.push(['config', '--no-plugins', 'allow-plugins.drupal/core-project-message', 'true']);
     }
-    commands.push(['config', '--no-plugins', 'allow-plugins.drupal/composer/installers', 'true']);
-    commands.push(['config', '--no-plugins', 'allow-plugins.drupal/dealerdirect/phpcodesniffer-composer-installer', 'true']);
+    commands.push(['config', '--no-plugins', 'allow-plugins.composer/installers', 'true']);
+    commands.push(['config', '--no-plugins', 'allow-plugins.dealerdirect/phpcodesniffer-composer-installer', 'true']);
+    commands.push(['config', '--no-plugins', 'allow-plugins.phpstan/extension-installer', 'true']);
+
+    allowPlugins.forEach(package => {
+        commands.push(['config', '--no-plugins', 'allow-plugins.' + package, 'true']);
+    });
 
     if (utils.getMajorVersionFromConstraint(drupalVersion) > 8) {
         commands.push(['require', '--dev', '--with-all-dependencies', 'phpspec/prophecy-phpunit:^2']);
     }
+
     if (extraDependencies) {
         commands.push(['require', extraDependencies]);
     }
@@ -2300,7 +2307,8 @@ doScript().catch(error => core.setFailed(error.message));
 
 const path = __nccwpck_require__(622);
 const semverMajor = __nccwpck_require__(688)
-const smeverCoerce = __nccwpck_require__(466)
+const smeverCoerce = __nccwpck_require__(466);
+const { access } = __nccwpck_require__(747);
 
 function resolvePath(filepath) {
     if (filepath[0] === '~') {
@@ -2312,11 +2320,21 @@ function resolvePath(filepath) {
 function getMajorVersionFromConstraint(constraint) {
     return semverMajor(smeverCoerce(constraint))
 }
-
+function stringToArray(string) {
+    return string.split(/\r?\n/).reduce(
+        (acc, line) =>
+          acc
+            .concat(line.split(","))
+            .filter(pat => pat)
+            .map(pat => pat.trim()),
+        []
+      );
+}
 
 module.exports = {
     resolvePath,
-    getMajorVersionFromConstraint
+    getMajorVersionFromConstraint,
+    stringToArray
 }
 
 
