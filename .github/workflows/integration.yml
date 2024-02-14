@@ -26,7 +26,9 @@ jobs:
           - php-version: "8.0"
             drupal-version: "^9"
           - php-version: "8.1"
-            drupal-version: "^10@alpha"
+            drupal-version: "^10"
+          - php-version: "8.2"
+            drupal-version: "11.x-dev"
     env:
       extensions: zip, gd
       key: cache-v1
