@@ -28,9 +28,9 @@ async function doScript() {
         ['config', 'minimum-stability', 'dev'],
         ['config', 'prefer-stable', 'true'],
         ['config', 'preferred-install', 'dist'],
+        ['require', '--dev', `drupal/core-dev:${drupalVersion}`],
         ['config', 'repositories.0', `{"type": "path", "url": "${githubWorkspacePath}", "options": {"symlink": false}}`],
         ['config', 'repositories.1', 'composer', 'https://packages.drupal.org/8'],
-        ['require', '--dev', `drupal/core-dev:${drupalVersion}`],
     ];
 
     if (utils.getMajorVersionFromConstraint(drupalVersion) === 8) {
