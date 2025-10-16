@@ -33,10 +33,8 @@ async function doScript() {
         ['config', 'repositories.1', 'composer', 'https://packages.drupal.org/8'],
     ];
 
-    if (utils.getMajorVersionFromConstraint(drupalVersion) === 8) {
-        commands.push(['config', '--no-plugins', 'allow-plugins.drupal/core-composer-scaffold', 'true']);
-        commands.push(['config', '--no-plugins', 'allow-plugins.drupal/core-project-message', 'true']);
-    }
+    commands.push(['config', '--no-plugins', 'allow-plugins.drupal/core-composer-scaffold', 'true']);
+    commands.push(['config', '--no-plugins', 'allow-plugins.drupal/core-project-message', 'true']);
     commands.push(['config', '--no-plugins', 'allow-plugins.composer/installers', 'true']);
     commands.push(['config', '--no-plugins', 'allow-plugins.dealerdirect/phpcodesniffer-composer-installer', 'true']);
     commands.push(['config', '--no-plugins', 'allow-plugins.phpstan/extension-installer', 'true']);
