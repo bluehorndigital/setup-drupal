@@ -28,7 +28,7 @@ async function doScript() {
         ['config', 'minimum-stability', 'dev'],
         ['config', 'prefer-stable', 'true'],
         ['config', 'preferred-install', 'dist'],
-        ['require', '--dev', `drupal/core-dev:${drupalVersion}`, '-W'],
+        ['require', '--dev', '--with-all-dependencies', `drupal/core-dev:${drupalVersion}`],
         ['config', 'repositories.0', `{"type": "path", "url": "${githubWorkspacePath}", "options": {"symlink": false}}`],
         ['config', 'repositories.1', 'composer', 'https://packages.drupal.org/8'],
     ];
