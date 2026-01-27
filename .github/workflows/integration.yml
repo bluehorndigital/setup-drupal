@@ -20,14 +20,14 @@ jobs:
       matrix:
         include:
           - php-version: "7.4"
-            drupal-version: "~8.9"
-          - php-version: "7.4"
             drupal-version: "^9"
           - php-version: "8.0"
             drupal-version: "^9"
           - php-version: "8.1"
             drupal-version: "^10"
-          - php-version: "8.2"
+          - php-version: "8.3"
+            drupal-version: "^11.0"
+          - php-version: "8.4"
             drupal-version: "11.x-dev"
     env:
       extensions: zip, gd
