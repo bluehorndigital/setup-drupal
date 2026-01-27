@@ -20,8 +20,6 @@ jobs:
       matrix:
         include:
           - php-version: "7.4"
-            drupal-version: "~8.9"
-          - php-version: "7.4"
             drupal-version: "^9"
           - php-version: "8.0"
             drupal-version: "^9"
